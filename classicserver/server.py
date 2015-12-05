@@ -151,7 +151,7 @@ class ClassicServer(object):
     def _flush_thread(self):
         while self._running:
             with self._connections_lock:
-                for connection in self._connections.copy().values():
+                for connection in self._connections.values():
                     try:
                         connection.flush()
                     except (IOError, BrokenPipeError):
