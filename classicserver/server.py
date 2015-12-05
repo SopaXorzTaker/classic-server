@@ -163,7 +163,7 @@ class ClassicServer(object):
             ignore = []
             
         with self._players_lock:
-            for player in self._players.values():
+            for player in self._players.copy().values():
                 connection = player.connection
                 if connection.get_address() not in ignore:
                     try:
