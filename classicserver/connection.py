@@ -62,3 +62,6 @@ class Connection(object):
 
     def get_address(self):
         return self._address
+
+    def close(self):
+        self._sock.close()

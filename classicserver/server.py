@@ -177,6 +177,9 @@ class ClassicServer(object):
         if connection.get_address() in self._players_by_address:
             player = self.get_player_by_address(connection.get_address())
 
+
+        connection.close()
+
         with self._connections_lock:
             del self._connections[connection.get_address()]
 
