@@ -172,11 +172,13 @@ class ClassicServer(object):
                         self._disconnect(connection)
 
     def _disconnect(self, connection):
+
+        logging.debug("Disconnecting connection %s" % connection.get_address())
+
         player = None
 
         if connection.get_address() in self._players_by_address:
             player = self.get_player_by_address(connection.get_address())
-
 
         connection.close()
 
