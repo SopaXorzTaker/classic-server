@@ -48,7 +48,11 @@ class Connection(object):
 
         while True:
             try:
-                buf += self._sock.recv(1024)
+                data = self._sock.recv(1024)
+                if not data:
+                    break
+
+                buf += data
                 success = True
             except BlockingIOError:
                 break
