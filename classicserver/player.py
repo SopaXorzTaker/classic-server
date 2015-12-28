@@ -29,6 +29,20 @@ class Player(object):
     user_type = None
 
     def __init__(self, player_id, connection, coordinates, name, user_type):
+        """
+        Creates the Player object.
+        :param player_id: The ID of the player to be created
+        :type player_id: int
+        :param connection: The connection of the player
+        :type connection: Connection
+        :param coordinates: The coordinates that the player will have
+        :type coordinates: list
+        :param name: The name of the player
+        :type name: str
+        :param user_type: The user type of the player.
+        :type user_type: int
+        """
+
         self.player_id = player_id
         self.connection = connection
         if coordinates:

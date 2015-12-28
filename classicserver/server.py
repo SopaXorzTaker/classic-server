@@ -92,9 +92,17 @@ class ClassicServer(object):
         self._sock.listen(1)
         self._start()
 
-    def data_hook(self, client, data):
+    def data_hook(self, connection, data):
+        """
+        Data hook, to report received data.
+        :param connection: The connection from which the data originates from.
+        :type connection: Connection
+        :param data: The received data.
+        :type data: buffer
+        """
+
         try:
-            self._packet_handler.handle_packet(client, data)
+            self._packet_handler.handle_packet(connection, data)
         except Exception as ex:
             logging.error("Error in packet handler: %s" % repr(ex))
             logging.debug(traceback.format_exc())
@@ -159,6 +167,15 @@ class ClassicServer(object):
                         self._disconnect(connection)
 
     def broadcast(self, data, ignore=None):
+        """
+        Broadcasts the data to all of the connected clients, except those listed in the ignore parameter.
+        A client is considered connected if it has been associated with a Player object.
+
+        :param data: The data to be sent
+        :type data: buffer
+        :param ignore: The addresses to ignore
+        :type ignore: list
+        """
         if not ignore:
             ignore = []
             
@@ -235,9 +252,17 @@ class ClassicServer(object):
 
     def add_player(self, connection, coordinates, name):
         """
-
+        Adds a player to the server.
+        :param connection: The connection of the player
         :type connection: Connection
+        :param coordinates: The coordinates the player is located at in the world.
+        :type coordinates: list
+        :param name: The name of the player.
+        :type name: str
+        :return: The ID of the newly-created player.
+        :rtype: int
         """
+
         if len(self._players) < self._max_players or self.is_op(name):
             player_id = self._player_id
             if self._player_id in self._players:
@@ -262,6 +287,14 @@ class ClassicServer(object):
             connection.send(DisconnectPlayerPacket.make({"reason": "Server full"}))
 
     def kick_player(self, player_id, reason):
+        """
+        Kicks the player given an ID.
+        :param player_id: The ID of the target player.
+        :type player_id: int
+        :param reason: The reason to be reported to the player.
+        :type reason: str
+        """
+
         player = self._players[player_id]
         logging.info("Kicking player %s for %s" % (player.name, reason))
         player.connection.send(DisconnectPlayerPacket.make({"reason": reason}))
@@ -271,32 +304,84 @@ class ClassicServer(object):
         self._disconnect(player.connection)
 
     def is_op(self, player_name):
+        """
+        Check the op privileges of a given player.
+        :param player_name: The name of the player
+        :type player_name: str
+        :return: True if player is op, otherwise False
+        :rtype: bool
+        """
+
         if player_name in self._op_players:
             return True
         else:
             return False
 
     def get_name(self):
+        """
+        Gets the name parameter of the server.
+        :return: The name of the server.
+        :rtype: str
+        """
         return self._server_name
 
     def get_motd(self):
+        """
+        Gets the MOTD (message of the day) parameter of the server.
+        :return: The message of the day.
+        :rtype: str
+        """
         return self._motd
 
     def get_player(self, player_id):
+        """
+        Gets a player by ID.
+
+        :param player_id: The ID of the player.
+        :type player_id: int
+        :return: The player
+        :rtype: Player
+        """
+
         return self._players[player_id]
 
     def get_player_by_address(self, address):
+        """
+        Gets a player by address.
+
+        :param address: The address of the player.
+        :type address: tuple
+        :return: The player
+        :rtype: Player
+        """
         return self._players_by_address[address]
 
     def get_players(self):
+        """
+        Returns a copy of the internal players array.
+        :return: The copy of the players array.
+        :rtype: list
+        """
         with self._players_lock:
             players_copy = self._players.copy()
         return players_copy
 
     def get_world(self):
+        """
+        Returns the current server world.
+        :return: The server world.
+        :rtype: World
+        """
+
         return self._world
 
     def get_salt(self):
+        """
+        Returns the server salt.
+
+        :return: The server salt.
+        :rtype: str
+        """
         return self._salt
 
     def __exit__(self):

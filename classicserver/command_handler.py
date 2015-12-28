@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
-from classicserver.packet.packet import MessagePacket, DisconnectPlayerPacket, PositionAndOrientationPacket
+from classicserver.packet.packet import MessagePacket, PositionAndOrientationPacket
 
 HELP_TEXT = """
 &aClassic-Server Help
@@ -31,6 +31,17 @@ HELP_TEXT = """
 class CommandHandler(object):
     @staticmethod
     def handle_command(server, player, command, args):
+        """
+        Handles the in-game commands.
+        :param server: The parent server object.
+        :type server: ClassicServer
+        :param player: The player who issued the command.
+        :type player: Player
+        :param command: The command issued, without the leading slash.
+        :type command: str
+        :param args: The arguments for the command
+        :type args: list
+        """
         if command == "tp":
             if len(args) == 3:
                 try:

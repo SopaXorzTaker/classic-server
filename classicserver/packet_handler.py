@@ -31,7 +31,9 @@ class PacketHandler(object):
 
     def __init__(self, server):
         """
+        Creates a PacketHandler object.
 
+        :param server: The parent server object.
         :type server: ClassicServer
         """
         self._server = server

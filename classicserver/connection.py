@@ -24,13 +24,13 @@ class Connection(object):
 
     def __init__(self, server, address, sock):
         """
-        Creates a connection object
+        Creates a connection object.
 
-        :param server: A server object, which should contain tne data_hook(connection, buf) method
+        :param server: A server object, which should contain tne data_hook(connection, buf) method.
         :type server: server
-        :param address: Address
+        :param address: The address.
         :type address tuple
-        :param sock: Socket
+        :param sock: The socket that the connection uses.
         :type sock socket.socket
         """
         self._address = address
@@ -40,9 +40,18 @@ class Connection(object):
         self._sock.setblocking(0)
 
     def send(self, data):
+        """
+        Sends the data via the connection.
+        :param data: The data to be sent
+        :type data: buffer
+        """
         self._sock.send(data)
 
     def flush(self):
+        """
+        Fetches the new data if available and calls the server hook if the receive was successful.
+        """
+
         success = False
         buf = b""
 
@@ -61,7 +70,17 @@ class Connection(object):
             self.server.data_hook(self, buf)
 
     def get_address(self):
+        """
+        Gets the address of the connection.
+
+        :return: The address.
+        :rtype: tuple
+        """
         return self._address
 
     def close(self):
+        """
+        Closes the connection socket.
+        """
+
         self._sock.close()

@@ -43,14 +43,56 @@ class World(object):
         return blocks
 
     def get_block(self, x, y, z):
+        """
+        Gets the block from the level.
+
+        :param x: the X coordinate.
+        :type x: int
+        :param y: the Y coordinate.
+        :type y: int
+        :param z: the Z coordinate.
+        :type z: int
+        :return: The block ID at the given coordinates.
+        :rtype: int
+        """
+
         return self.blocks[x + WORLD_DEPTH * (z + WORLD_WIDTH * y)]
 
     def set_block(self, x, y, z, block):
+        """
+        Sets the block in the level.
+
+        :param x: The X coordinate.
+        :type x: int
+        :param y: The Y coordinate.
+        :type y: int
+        :param z: The Z coordinate.
+        :type z: int
+        :param block: The block ID to be set
+        :type block: int
+        """
+
         self.blocks[x + WORLD_DEPTH * (z + WORLD_WIDTH * y)] = block
 
     def encode(self):
+        """
+        Encodes the level into the network format.
+
+        :return: The network-encoded level.
+        :rtype: buffer
+        """
         return gzip.compress(struct.pack("!I", len(self.blocks)) + bytes(self.blocks))
 
     @staticmethod
     def from_save(data):
+        """
+        Creates the World object from network-encoded buffer.
+
+        :param data: The encoded level.
+        :type data: buffer
+        :return: The World object from the data.
+        :rtype: World
+        """
+
+        # TODO check the unpacked length against the preceding field
         return World(bytearray(gzip.decompress(data)[4:]))
