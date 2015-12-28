@@ -94,5 +94,11 @@ class World(object):
         :rtype: World
         """
 
-        # TODO check the unpacked length against the preceding field
-        return World(bytearray(gzip.decompress(data)[4:]))
+        unpacked = gzip.decompress(data)
+        payload_length = struct.unpack("!I", unpacked[:4])
+        payload = unpacked[4:]
+
+        if payload_length != len(payload):
+            raise ValueError("Invalid data")
+
+        return World(bytearray(payload))
