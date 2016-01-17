@@ -231,7 +231,7 @@ class ClassicServer(object):
             return
         except FileNotFoundError:
             logging.info("Save file not found, creating a new one")
-        except IOError as ex:
+        except (IOError, ValueError) as ex:
             logging.error("Error during loading save file: %s" % repr(ex))
             logging.error(traceback.format_exc())
 
