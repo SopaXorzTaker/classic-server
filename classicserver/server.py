@@ -66,7 +66,7 @@ class ClassicServer(object):
 
     def __init__(self, config):
         # bind_address, server_name="", motd="", save_file="", heartbeat_url="", op_players=None, max_players=32
-        self._bind_address = ("0.0.0.0", config["server"]["port"])
+        self._bind_address = ("0.0.0.0", int(config["server"]["port"]))
         self._running = False
         self._server_name = config["server"]["name"]
         self._motd = config["server"]["motd"]
