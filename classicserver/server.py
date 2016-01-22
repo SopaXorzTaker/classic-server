@@ -190,21 +190,29 @@ class ClassicServer(object):
 
     def _disconnect(self, connection):
 
-        logging.debug("Disconnecting connection %s" % connection.get_address())
-
+        address = connection.get_address()
         player = None
 
-        if connection.get_address() in self._players_by_address:
-            player = self.get_player_by_address(connection.get_address())
+        if not address:
+            logging.debug("Invalid connection, ignoring")
+            return
 
-        connection.close()
+        logging.debug("Disconnecting connection %s" % connection.get_address())
+
+        try:
+            connection.close()
+        except IOError:
+            pass
+
+        if address in self._players_by_address:
+            player = self.get_player_by_address(address)
 
         with self._connections_lock:
-            del self._connections[connection.get_address()]
+            del self._connections[address]
 
         if player:
             logging.info("Player %s has quit" % player.name)
-            del self._players_by_address[connection.get_address()]
+            del self._players_by_address[address]
             del self._players[player.player_id]
             self.broadcast(DespawnPlayerPacket.make({"player_id": player.player_id}))
             self.broadcast(MessagePacket.make({"player_id": 0, "message": "&e%s&f has quit!" % player.name}))
