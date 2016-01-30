@@ -95,7 +95,7 @@ class World(object):
         """
 
         unpacked = gzip.decompress(data)
-        payload_length = struct.unpack("!I", unpacked[:4])
+        payload_length = struct.unpack("!I", unpacked[:4])[0]
         payload = unpacked[4:]
 
         if payload_length != len(payload):
