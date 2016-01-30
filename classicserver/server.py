@@ -132,10 +132,11 @@ class ClassicServer(object):
                     "player_id": 0,
                     "message": "Autosaving the world..."
                 }))
+
                 self.save_world()
                 time.sleep(120)
-            except BaseException as ex:
-                logging.error("Autosaving failed: %s" % repr(ex))
+            except:
+                logging.error("Autosaving failed")
                 logging.debug(traceback.format_exc())
 
         self.save_world()
