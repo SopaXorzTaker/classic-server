@@ -22,7 +22,7 @@ To change the configuration, edit the file `config/config.json` as shown below:
     "file": "<to save the map, please specify the path to save the map in>"
   },
 
-  "heartbeat_url": "<heartbeat url, you will need to change that for Minecraft.net instead of ClassiCube>"
+  "heartbeat_url": "<Classicube heartbeat by default, change if needed>"
 }
 ```
 
