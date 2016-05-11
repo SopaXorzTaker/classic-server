@@ -41,7 +41,7 @@ class PacketHandler(object):
     def handle_packet(self, connection, data):
         buf = ReadBuffer(data)
 
-        while buf.left() > 0:
+        while buf.left():
             try:
                 packet, fields = Packet.from_buffer(buf, True)
             except Exception as ex:
